@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>비밀 요원 미션</title>
+    <title>Secret Mission: Alpha</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
     <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
@@ -12,68 +12,75 @@
     <style>
         body { background-color: #1a1a1a; color: #00ff00; font-family: 'Courier New', monospace; text-align: center; padding: 20px; }
         .container { max-width: 600px; margin: 0 auto; background: #000; padding: 20px; border: 2px solid #00ff00; border-radius: 10px; }
-        input { font-size: 20px; padding: 10px; text-align: center; width: 80%; background: #333; color: white; border: 1px solid #00ff00; }
-        button { font-size: 18px; padding: 10px 30px; background: #00ff00; color: black; border: none; cursor: pointer; margin-top: 15px; font-weight: bold; }
+        /* Image Style */
+        .main-image { width: 100%; max-width: 550px; border: 2px solid #00ff00; border-radius: 5px; margin-bottom: 10px; }
+        
+        input { font-size: 20px; padding: 10px; text-align: center; width: 80%; background: #333; color: white; border: 1px solid #00ff00; margin-top: 10px; }
+        button { font-size: 18px; padding: 10px 30px; background: #00ff00; color: black; border: none; cursor: pointer; margin-top: 20px; font-weight: bold; }
         button:hover { background: white; }
         .hidden { display: none; }
         #board { width: 100%; margin: 20px auto; }
         .message { color: yellow; font-size: 18px; margin: 10px 0; }
+        .clue-box { border: 2px dashed yellow; padding: 20px; margin-top: 20px; color: yellow; font-size: 24px; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>🕵️ 비밀 요원: 작전명 알파</h1>
+    <img src="image_0.png" alt="Secret Agents" class="main-image">
+    
+    <h1>🕵️ SECRET AGENT PORTAL</h1>
     <hr style="border-color: #00ff00;">
 
     <div id="level1">
-        <h3>레벨 1: 암호 해독</h3>
-        <p>도시도 있고 산도 있고 강도 있지만,<br>사람도 나무도 물고기도 없는 것은?</p>
-        <input type="text" id="ans1" placeholder="정답을 입력하세요">
+        <h3>LEVEL 1: IDENTIFICATION</h3>
+        <p>I have cities, but no houses.<br>I have mountains, but no trees.<br>I have water, but no fish.</p>
+        <p><strong>What am I?</strong></p>
+        <input type="text" id="ans1" placeholder="Enter password...">
         <br>
-        <button onclick="checkLevel1()">제출</button>
+        <button onclick="checkLevel1()">SUBMIT</button>
         <p id="msg1" class="message"></p>
     </div>
 
     <div id="level2" class="hidden">
-        <h3>레벨 2: 최후의 일격</h3>
-        <p>컴퓨터가 방심했다! <br><strong>백(White)이 한 수만 두면 이깁니다.</strong><br>체크메이트를 만드세요!</p>
+        <h3>LEVEL 2: THE FINAL MOVE</h3>
+        <p>The computer made a mistake! <br><strong>White to move and Checkmate in 1.</strong></p>
         <div id="board"></div>
-        <p id="status">백(White) 차례입니다. 드래그해서 두세요.</p>
+        <p id="status">Your Turn (White). Drag the piece.</p>
     </div>
 
     <div id="level3" class="hidden">
-        <h1>🏆 작전 성공! 🏆</h1>
-        <p>축하합니다, 요원님.</p>
-        <p>보물은 다음 장소에 숨겨져 있습니다:</p>
-        <div style="border: 2px dashed yellow; padding: 20px; margin-top: 20px; color: yellow; font-size: 24px;">
-            거실 소파 쿠션 아래
+        <h1>🏆 MISSION ACCOMPLISHED 🏆</h1>
+        <p>Well done, Agents Ollie, Oweni, and Otty!</p>
+        <p>Your treasure is hidden at:</p>
+        <div class="clue-box">
+            UNDER THE SOFA PILLOW
         </div>
     </div>
 
 </div>
 
 <script>
-    // --- 레벨 1 로직 ---
+    // --- LEVEL 1 LOGIC ---
     function checkLevel1() {
-        var answer = document.getElementById('ans1').value.replace(/\s/g, '').toLowerCase(); // 공백제거 및 소문자 변환
-        // 정답: 지도 또는 map
-        if (answer === "지도" || answer === "map") {
+        var answer = document.getElementById('ans1').value.trim().toLowerCase();
+        
+        // Answer is "map"
+        if (answer === "map") {
             document.getElementById('level1').classList.add('hidden');
             document.getElementById('level2').classList.remove('hidden');
-            initChess(); // 체스 게임 시작
+            initChess(); // Load Chess Board
         } else {
-            document.getElementById('msg1').innerText = "접근 거부: 암호가 틀렸습니다.";
+            document.getElementById('msg1').innerText = "ACCESS DENIED. TRY AGAIN.";
         }
     }
 
-    // --- 레벨 2 로직 (체스) ---
+    // --- LEVEL 2 LOGIC (CHESS) ---
     var board = null;
     var game = new Chess();
 
     function initChess() {
-        // 퍼즐 세팅: 백이 룩을 옮기면 바로 이기는 상황 (Back Rank Mate)
-        // 백 룩: e1, 흑 킹: g8, 흑 폰들: f7, g7, h7 (도망 못 감)
+        // Setup Puzzle: Back Rank Mate
         var puzzleFEN = '6k1/5ppp/8/8/8/8/8/4R1K1 w - - 0 1';
         game.load(puzzleFEN);
 
@@ -86,40 +93,40 @@
         };
         board = Chessboard('board', config);
         
-        // 모바일에서 크기 조절
+        // Resize for mobile screens
         window.setTimeout(function() { board.resize(); }, 500);
     }
 
     function onDragStart (source, piece) {
-        // 게임이 끝났거나 흑(검은색) 기물을 만지려고 하면 못하게 막음
+        // Prevent moving black pieces or if game over
         if (game.game_over() || piece.search(/^b/) !== -1) {
             return false;
         }
     }
 
     function onDrop (source, target) {
-        // 이동 시도
+        // Try move
         var move = game.move({
             from: source,
             to: target,
-            promotion: 'q' // 폰이 끝까지 가면 자동으로 퀸으로 변신
+            promotion: 'q'
         });
 
-        // 불가능한 수라면 원래대로 돌려놓음
+        // Illegal move -> snapback
         if (move === null) return 'snapback';
 
-        // 체크메이트인지 확인
+        // Check for Checkmate
         if (game.in_checkmate()) {
-            document.getElementById('status').innerText = "체크메이트! 승리!";
-            // 1.5초 뒤에 레벨 3 화면으로 넘어감
+            document.getElementById('status').innerText = "CHECKMATE! YOU WIN!";
+            // Wait 1.5 seconds then show treasure
             setTimeout(function() {
                 document.getElementById('level2').classList.add('hidden');
                 document.getElementById('level3').classList.remove('hidden');
             }, 1500);
         } else {
-            // 체크메이트가 아니면 다시 두게 함 (퍼즐이므로)
-            alert("그 수는 체크메이트가 아닙니다! 다시 시도하세요.");
-            game.undo(); // 수 무르기
+            // Not checkmate (Puzzle fail)
+            alert("That is not checkmate! Try again.");
+            game.undo();
             return 'snapback';
         }
     }
