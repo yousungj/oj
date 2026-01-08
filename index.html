@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Secret Mission: Alpha</title>
+    <meta charset="UTF-8">
+    <title>🏴‍☠️ Treasure Hunt Adventure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
     <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
@@ -10,72 +11,464 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
 
     <style>
-        body { background-color: #1a1a1a; color: #00ff00; font-family: 'Courier New', monospace; text-align: center; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: #000; padding: 20px; border: 2px solid #00ff00; border-radius: 10px; }
-        /* Image Style */
-        .main-image { width: 100%; max-width: 550px; border: 2px solid #00ff00; border-radius: 5px; margin-bottom: 10px; }
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
         
-        input { font-size: 20px; padding: 10px; text-align: center; width: 80%; background: #333; color: white; border: 1px solid #00ff00; margin-top: 10px; }
-        button { font-size: 18px; padding: 10px 30px; background: #00ff00; color: black; border: none; cursor: pointer; margin-top: 20px; font-weight: bold; }
-        button:hover { background: white; }
+        * { box-sizing: border-box; }
+        body { 
+            background: #8B7355;
+            background-image: 
+                linear-gradient(45deg, #654321 25%, transparent 25%),
+                linear-gradient(-45deg, #654321 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #654321 75%),
+                linear-gradient(-45deg, transparent 75%, #654321 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+            color: #fff; 
+            font-family: 'Press Start 2P', 'Courier New', monospace; 
+            text-align: center; 
+            padding: 20px;
+            min-height: 100vh;
+            image-rendering: pixelated;
+        }
+        .container { 
+            max-width: 700px; 
+            margin: 0 auto; 
+            background: rgba(54, 47, 45, 0.95); 
+            padding: 30px; 
+            border: 8px solid #5A5A5A;
+            border-style: solid;
+            box-shadow: 
+                inset 4px 4px 0 rgba(0,0,0,0.3),
+                inset -4px -4px 0 rgba(255,255,255,0.1),
+                0 8px 0 #3A3A3A;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+        p {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+        .main-image {
+            width: 100%;
+            max-width: 350px;
+            border: 4px solid #5A5A5A;
+            margin-bottom: 20px;
+            image-rendering: pixelated;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 32px;
+            background: #1a1a1a;
+            border: 4px solid #5A5A5A;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5);
+        }
+        .progress-fill {
+            height: 100%;
+            background: #55FF55;
+            background-image: repeating-linear-gradient(
+                90deg,
+                #55FF55 0px,
+                #55FF55 4px,
+                #44DD44 4px,
+                #44DD44 8px
+            );
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #000;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+            font-size: 10px;
+        }
+        h1 { 
+            color: #FFFF55; 
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.5);
+            font-size: 16px;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        h3 { 
+            color: #55FFFF; 
+            margin-top: 20px;
+            font-size: 14px;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+        }
+        input { 
+            font-size: 14px; 
+            padding: 12px; 
+            text-align: center; 
+            width: 90%; 
+            max-width: 300px;
+            background: #fff; 
+            color: #000; 
+            border: 4px solid #5A5A5A;
+            margin: 10px 0;
+            font-family: 'Press Start 2P', monospace;
+            box-shadow: inset 2px 2px 0 rgba(0,0,0,0.3);
+        }
+        button { 
+            font-size: 10px; 
+            padding: 12px 20px; 
+            background: #7DBE3B; 
+            color: #fff; 
+            border: 4px solid #5A5A5A;
+            cursor: pointer; 
+            margin: 10px 5px;
+            font-weight: bold;
+            font-family: 'Press Start 2P', monospace;
+            box-shadow: 
+                inset 2px 2px 0 rgba(255,255,255,0.3),
+                inset -2px -2px 0 rgba(0,0,0,0.3),
+                0 4px 0 #2A5A1A;
+            transition: all 0.1s;
+            position: relative;
+        }
+        button:hover { 
+            background: #8DD84B; 
+            top: 2px;
+            box-shadow: 
+                inset 2px 2px 0 rgba(255,255,255,0.3),
+                inset -2px -2px 0 rgba(0,0,0,0.3),
+                0 2px 0 #2A5A1A;
+        }
+        button:active {
+            top: 4px;
+            box-shadow: 
+                inset 2px 2px 0 rgba(0,0,0,0.3),
+                0 0 0 #2A5A1A;
+        }
         .hidden { display: none; }
-        #board { width: 100%; margin: 20px auto; }
-        .message { color: yellow; font-size: 18px; margin: 10px 0; }
-        .clue-box { border: 2px dashed yellow; padding: 20px; margin-top: 20px; color: yellow; font-size: 24px; }
+        #board { 
+            width: 400px !important; 
+            max-width: 90%; 
+            margin: 20px auto;
+        }
+        #board img {
+            image-rendering: auto !important;
+            filter: none !important;
+        }
+        #board .square-55d63 {
+            image-rendering: auto !important;
+        }
+        .white-1e1d7 {
+            background-color: #f0d9b5 !important;
+        }
+        .black-3c85d {
+            background-color: #b58863 !important;
+        }
+        .message { 
+            color: #FFFF55; 
+            font-size: 11px; 
+            margin: 15px 0;
+            min-height: 25px;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+        }
+        .treasure-box { 
+            border: 6px solid #FFD700; 
+            padding: 25px; 
+            margin-top: 20px; 
+            background: #8B7355;
+            font-size: 14px;
+            font-weight: bold;
+            animation: glow 2s infinite;
+            box-shadow: 
+                inset 3px 3px 0 rgba(255,255,255,0.2),
+                inset -3px -3px 0 rgba(0,0,0,0.3),
+                0 0 20px rgba(255,215,0,0.5);
+        }
+        @keyframes glow {
+            0%, 100% { box-shadow: 
+                inset 3px 3px 0 rgba(255,255,255,0.2),
+                inset -3px -3px 0 rgba(0,0,0,0.3),
+                0 0 20px rgba(255,215,0,0.5); }
+            50% { box-shadow: 
+                inset 3px 3px 0 rgba(255,255,255,0.2),
+                inset -3px -3px 0 rgba(0,0,0,0.3),
+                0 0 40px rgba(255,215,0,0.8); }
+        }
+        .math-problem {
+            font-size: 20px;
+            color: #FFFF55;
+            margin: 20px 0;
+            font-weight: bold;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+        }
+        .puzzle-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            max-width: 400px;
+            margin: 20px auto;
+            background: #3A3A3A;
+            padding: 8px;
+            border: 4px solid #5A5A5A;
+            box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5);
+        }
+        .puzzle-tile {
+            aspect-ratio: 1;
+            background: #8B7355;
+            background-image: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 8px,
+                rgba(0,0,0,0.1) 8px,
+                rgba(0,0,0,0.1) 16px
+            );
+            border: 4px solid #5A5A5A;
+            font-size: 32px;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.1s;
+            user-select: none;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.5);
+            box-shadow: 
+                inset 2px 2px 0 rgba(255,255,255,0.2),
+                inset -2px -2px 0 rgba(0,0,0,0.3);
+        }
+        .puzzle-tile:hover {
+            background: #9B8365;
+            top: 1px;
+            position: relative;
+        }
+        .puzzle-tile.empty {
+            background: #2A2A2A;
+            cursor: default;
+            box-shadow: inset 3px 3px 0 rgba(0,0,0,0.5);
+        }
+        .upload-area {
+            border: 4px solid #5A5A5A;
+            padding: 30px;
+            margin: 20px 0;
+            background: rgba(139, 115, 85, 0.3);
+            box-shadow: inset 2px 2px 0 rgba(0,0,0,0.3);
+        }
+        .upload-preview {
+            max-width: 100%;
+            max-height: 300px;
+            margin-top: 15px;
+            border: 4px solid #5A5A5A;
+            image-rendering: pixelated;
+        }
+        #fileInput {
+            display: none;
+        }
+        .file-button {
+            background: #4A9BD1;
+            color: #fff;
+            box-shadow: 
+                inset 2px 2px 0 rgba(255,255,255,0.3),
+                inset -2px -2px 0 rgba(0,0,0,0.3),
+                0 4px 0 #2A5A8A;
+        }
+        .file-button:hover {
+            background: #5AABD1;
+        }
+        .stage-icon {
+            font-size: 48px;
+            margin: 15px 0;
+            filter: drop-shadow(3px 3px 0 rgba(0,0,0,0.5));
+        }
+        hr {
+            border: none;
+            height: 4px;
+            background: #5A5A5A;
+            margin: 20px 0;
+            box-shadow: 0 2px 0 rgba(0,0,0,0.3);
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <img src="image_0.png" alt="Secret Agents" class="main-image">
+    <img src="image_0.png" alt="Minecraft Adventure" class="main-image">
     
-    <h1>🕵️ SECRET AGENT PORTAL</h1>
-    <hr style="border-color: #00ff00;">
+    <!-- Progress Bar -->
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressBar" style="width: 0%;">Stage 0/5</div>
+    </div>
+    
+    <h1>🔍 MYSTERY IN ROLLING HILLS ESTATES 🔍</h1>
+    
+    <div style="background: rgba(0,0,0,0.5); padding: 20px; margin: 20px 0; border: 4px solid #FF6B6B; box-shadow: inset 2px 2px 0 rgba(0,0,0,0.3);">
+        <p style="font-size: 13px; line-height: 2; color: #FFFF55;">
+            In the middle of the night in quiet Rolling Hills Estates, a lady named <strong style="color: #FF6B6B;">June</strong> disappeared. 
+            To help find her, the community called upon the <strong style="color: #55FFFF;">RHCC kids</strong> to find the clues.
+        </p>
+        <p style="font-size: 13px; line-height: 2; color: #FFFF55; margin-top: 15px;">
+            Now gather at least <strong style="color: #55FF55;">5 kids</strong> and solve the clues together.
+        </p>
+        <p style="font-size: 14px; color: #FF6B6B; margin-top: 15px; font-weight: bold;">
+            Good luck. June's life depends on you! 🚨
+        </p>
+    </div>
+    
+    <p style="font-size: 12px;">Complete all 5 stages to find June!</p>
+    <hr style="border-color: #ffd700;">
 
-    <div id="level1">
-        <h3>LEVEL 1: IDENTIFICATION</h3>
-        <p>I have cities, but no houses.<br>I have mountains, but no trees.<br>I have water, but no fish.</p>
-        <p><strong>What am I?</strong></p>
-        <input type="text" id="ans1" placeholder="Enter password...">
+    <!-- STAGE 1: MATH PROBLEMS -->
+    <div id="stage1">
+        <div class="stage-icon">🔢</div>
+        <h3>STAGE 1: MATH CHALLENGE</h3>
+        <p>Solve these math problems to proceed!</p>
+        
+        <div class="math-problem" id="mathProblem">5 + 3 = ?</div>
+        <input type="number" id="mathAnswer" placeholder="Your answer">
         <br>
-        <button onclick="checkLevel1()">SUBMIT</button>
-        <p id="msg1" class="message"></p>
+        <button onclick="checkMath()">SUBMIT ANSWER</button>
+        <p id="mathMsg" class="message"></p>
+        <p style="color: #aaa; font-size: 14px;">Problem <span id="mathProgress">1</span> of 3</p>
     </div>
 
-    <div id="level2" class="hidden">
-        <h3>LEVEL 2: THE FINAL MOVE</h3>
-        <p>The computer made a mistake! <br><strong>White to move and Checkmate in 1.</strong></p>
+    <!-- STAGE 2: CHESS GAME -->
+    <div id="stage2" class="hidden">
+        <div class="stage-icon">♟️</div>
+        <h3>STAGE 2: CHESS MASTER</h3>
+        <p>Find the checkmate in 1 move!</p>
+        <p style="color: #00ffff;">You are playing as White. Drag a piece to win!</p>
         <div id="board"></div>
-        <p id="status">Your Turn (White). Drag the piece.</p>
+        <p id="status" class="message">Your Turn (White)</p>
     </div>
 
-    <div id="level3" class="hidden">
-        <h1>🏆 MISSION ACCOMPLISHED 🏆</h1>
-        <p>Well done, Agents Ollie, Oweni, and Otty!</p>
-        <p>Your treasure is hidden at:</p>
-        <div class="clue-box">
-            UNDER THE SOFA PILLOW
+    <!-- STAGE 3: SLIDING PUZZLE -->
+    <div id="stage3" class="hidden">
+        <div class="stage-icon">🧩</div>
+        <h3>STAGE 3: NUMBER PUZZLE</h3>
+        <p>Arrange the numbers from 1 to 8 in order!</p>
+        <p style="color: #aaa; font-size: 14px;">Click tiles next to the empty space to move them</p>
+        
+        <div class="puzzle-grid" id="puzzleGrid"></div>
+        <button onclick="shufflePuzzle()">SHUFFLE</button>
+        <button onclick="checkPuzzle()">CHECK SOLUTION</button>
+        <p id="puzzleMsg" class="message"></p>
+    </div>
+
+    <!-- STAGE 4: PHOTO UPLOAD -->
+    <div id="stage4" class="hidden">
+        <div class="stage-icon">📸</div>
+        <h3>STAGE 4: PHOTO MISSION</h3>
+        <p><strong>Your mission:</strong></p>
+        <p style="font-size: 20px; color: #ffd700;">Find something RED in your house<br>and take a photo of it!</p>
+        
+        <div class="upload-area">
+            <p>📱 Click below to upload your photo</p>
+            <input type="file" id="fileInput" accept="image/*" onchange="previewPhoto()">
+            <button class="file-button" onclick="document.getElementById('fileInput').click()">
+                CHOOSE PHOTO
+            </button>
+            <div id="photoPreview"></div>
         </div>
+        <button onclick="checkPhoto()" id="submitPhotoBtn" class="hidden">SUBMIT PHOTO</button>
+        <p id="photoMsg" class="message"></p>
+    </div>
+
+    <!-- STAGE 5: TREASURE FOUND! -->
+    <div id="stage5" class="hidden">
+        <div class="stage-icon">🎉</div>
+        <h1>🏆 CONGRATULATIONS! 🏆</h1>
+        <p style="font-size: 22px;">You've completed all the challenges!</p>
+        <p style="font-size: 18px;">Your treasure awaits...</p>
+        
+        <div class="treasure-box">
+            <div>🎁 SECRET CODE 🎁</div>
+            <div style="font-size: 48px; margin-top: 15px; letter-spacing: 5px;">
+                CHAMPION
+            </div>
+        </div>
+        
+        <p style="margin-top: 25px; font-size: 20px; color: #00ff00;">
+            Use this code to unlock your treasure box!
+        </p>
+        <p style="font-size: 16px; color: #aaa; margin-top: 20px;">
+            Amazing work! You're a true treasure hunter! 🌟
+        </p>
     </div>
 
 </div>
 
 <script>
-    // --- LEVEL 1 LOGIC ---
-    function checkLevel1() {
-        var answer = document.getElementById('ans1').value.trim().toLowerCase();
+    let currentStage = 1;
+    
+    // Update progress bar
+    function updateProgress() {
+        const progressBar = document.getElementById('progressBar');
+        const percentage = (currentStage / 5) * 100;
+        progressBar.style.width = percentage + '%';
+        progressBar.textContent = 'Stage ' + currentStage + '/5';
+    }
+    
+    // Go to next stage
+    function nextStage(current, next) {
+        document.getElementById(current).classList.add('hidden');
+        document.getElementById(next).classList.remove('hidden');
+        currentStage++;
+        updateProgress();
+        window.scrollTo(0, 0);
+    }
+    
+    // ====== STAGE 1: MATH PROBLEMS ======
+    const mathProblems = [
+        { question: "5 + 3 = ?", answer: 8 },
+        { question: "12 - 7 = ?", answer: 5 },
+        { question: "4 × 3 = ?", answer: 12 }
+    ];
+    let currentMathProblem = 0;
+    
+    function checkMath() {
+        const userAnswer = parseInt(document.getElementById('mathAnswer').value);
+        const correctAnswer = mathProblems[currentMathProblem].answer;
+        const msgEl = document.getElementById('mathMsg');
         
-        // Answer is "map"
-        if (answer === "map") {
-            document.getElementById('level1').classList.add('hidden');
-            document.getElementById('level2').classList.remove('hidden');
-            initChess(); // Load Chess Board
+        if (userAnswer === correctAnswer) {
+            currentMathProblem++;
+            
+            if (currentMathProblem < mathProblems.length) {
+                // Next problem
+                msgEl.textContent = "✅ Correct! Next problem...";
+                msgEl.style.color = "#00ff00";
+                document.getElementById('mathAnswer').value = '';
+                
+                setTimeout(() => {
+                    document.getElementById('mathProblem').textContent = 
+                        mathProblems[currentMathProblem].question;
+                    document.getElementById('mathProgress').textContent = 
+                        (currentMathProblem + 1);
+                    msgEl.textContent = '';
+                }, 1000);
+            } else {
+                // All problems solved!
+                msgEl.textContent = "🎉 Perfect! Moving to Stage 2...";
+                msgEl.style.color = "#00ff00";
+                setTimeout(() => {
+                    nextStage('stage1', 'stage2');
+                    initChess();
+                }, 1500);
+            }
         } else {
-            document.getElementById('msg1').innerText = "ACCESS DENIED. TRY AGAIN.";
+            msgEl.textContent = "❌ Try again!";
+            msgEl.style.color = "#ff0000";
         }
     }
-
-    // --- LEVEL 2 LOGIC (CHESS) ---
+    
+    // Allow Enter key for math
+    document.addEventListener('DOMContentLoaded', function() {
+        const mathInput = document.getElementById('mathAnswer');
+        if (mathInput) {
+            mathInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') checkMath();
+            });
+        }
+    });
+    
+    // ====== STAGE 2: CHESS ======
     var board = null;
     var game = new Chess();
 
@@ -89,22 +482,25 @@
             position: puzzleFEN,
             onDragStart: onDragStart,
             onDrop: onDrop,
-            onSnapEnd: onSnapEnd
+            onSnapEnd: onSnapEnd,
+            pieceTheme: 'https://chessboardjs.com/img/chesspieces/wikipedia/{piece}.png'
         };
         board = Chessboard('board', config);
         
         // Resize for mobile screens
-        window.setTimeout(function() { board.resize(); }, 500);
+        window.setTimeout(function() { 
+            board.resize(); 
+        }, 500);
     }
 
-    function onDragStart (source, piece) {
+    function onDragStart(source, piece) {
         // Prevent moving black pieces or if game over
         if (game.game_over() || piece.search(/^b/) !== -1) {
             return false;
         }
     }
 
-    function onDrop (source, target) {
+    function onDrop(source, target) {
         // Try move
         var move = game.move({
             from: source,
@@ -117,23 +513,140 @@
 
         // Check for Checkmate
         if (game.in_checkmate()) {
-            document.getElementById('status').innerText = "CHECKMATE! YOU WIN!";
-            // Wait 1.5 seconds then show treasure
+            document.getElementById('status').innerText = "✅ CHECKMATE! YOU WIN!";
+            document.getElementById('status').style.color = "#00ff00";
+            // Wait 1.5 seconds then show next stage
             setTimeout(function() {
-                document.getElementById('level2').classList.add('hidden');
-                document.getElementById('level3').classList.remove('hidden');
+                nextStage('stage2', 'stage3');
+                initPuzzle();
             }, 1500);
         } else {
-            // Not checkmate (Puzzle fail)
-            alert("That is not checkmate! Try again.");
+            // Not checkmate
+            alert("That's not checkmate! Try again.");
             game.undo();
             return 'snapback';
         }
     }
 
-    function onSnapEnd () {
+    function onSnapEnd() {
         board.position(game.fen());
     }
+    
+    // ====== STAGE 3: SLIDING PUZZLE ======
+    let puzzleState = [1, 2, 3, 4, 5, 6, 7, 8, 0]; // 0 = empty
+    
+    function initPuzzle() {
+        renderPuzzle();
+        shufflePuzzle();
+    }
+    
+    function renderPuzzle() {
+        const grid = document.getElementById('puzzleGrid');
+        grid.innerHTML = '';
+        
+        puzzleState.forEach((num, index) => {
+            const tile = document.createElement('div');
+            tile.className = 'puzzle-tile' + (num === 0 ? ' empty' : '');
+            tile.textContent = num === 0 ? '' : num;
+            tile.onclick = () => moveTile(index);
+            grid.appendChild(tile);
+        });
+    }
+    
+    function moveTile(index) {
+        const emptyIndex = puzzleState.indexOf(0);
+        const row = Math.floor(index / 3);
+        const col = index % 3;
+        const emptyRow = Math.floor(emptyIndex / 3);
+        const emptyCol = emptyIndex % 3;
+        
+        // Check if adjacent
+        if ((Math.abs(row - emptyRow) === 1 && col === emptyCol) ||
+            (Math.abs(col - emptyCol) === 1 && row === emptyRow)) {
+            // Swap
+            [puzzleState[index], puzzleState[emptyIndex]] = 
+                [puzzleState[emptyIndex], puzzleState[index]];
+            renderPuzzle();
+        }
+    }
+    
+    function shufflePuzzle() {
+        // Simple shuffle
+        for (let i = 0; i < 100; i++) {
+            const emptyIndex = puzzleState.indexOf(0);
+            const neighbors = [];
+            
+            const row = Math.floor(emptyIndex / 3);
+            const col = emptyIndex % 3;
+            
+            if (row > 0) neighbors.push(emptyIndex - 3);
+            if (row < 2) neighbors.push(emptyIndex + 3);
+            if (col > 0) neighbors.push(emptyIndex - 1);
+            if (col < 2) neighbors.push(emptyIndex + 1);
+            
+            const randomNeighbor = neighbors[Math.floor(Math.random() * neighbors.length)];
+            [puzzleState[emptyIndex], puzzleState[randomNeighbor]] = 
+                [puzzleState[randomNeighbor], puzzleState[emptyIndex]];
+        }
+        renderPuzzle();
+        document.getElementById('puzzleMsg').textContent = '';
+    }
+    
+    function checkPuzzle() {
+        const solved = puzzleState.every((num, index) => 
+            index === 8 ? num === 0 : num === index + 1
+        );
+        
+        const msgEl = document.getElementById('puzzleMsg');
+        if (solved) {
+            msgEl.textContent = "🎉 Puzzle Solved! Moving to Stage 4...";
+            msgEl.style.color = "#00ff00";
+            setTimeout(() => {
+                nextStage('stage3', 'stage4');
+            }, 1500);
+        } else {
+            msgEl.textContent = "❌ Not quite right. Keep trying!";
+            msgEl.style.color = "#ff0000";
+        }
+    }
+    
+    // ====== STAGE 4: PHOTO UPLOAD ======
+    let photoUploaded = false;
+    
+    function previewPhoto() {
+        const file = document.getElementById('fileInput').files[0];
+        const preview = document.getElementById('photoPreview');
+        const submitBtn = document.getElementById('submitPhotoBtn');
+        
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.innerHTML = '<img src="' + e.target.result + 
+                    '" class="upload-preview" alt="Your photo">';
+                photoUploaded = true;
+                submitBtn.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+    
+    function checkPhoto() {
+        const msgEl = document.getElementById('photoMsg');
+        
+        if (photoUploaded) {
+            msgEl.textContent = "📸 Perfect! Great photo! Moving to final stage...";
+            msgEl.style.color = "#00ff00";
+            setTimeout(() => {
+                nextStage('stage4', 'stage5');
+            }, 2000);
+        } else {
+            msgEl.textContent = "❌ Please upload a photo first!";
+            msgEl.style.color = "#ff0000";
+        }
+    }
+    
+    // Initialize
+    updateProgress();
 </script>
 
 </body>
