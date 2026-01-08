@@ -289,11 +289,11 @@
 <body>
 
 <div class="container">
-    <img src="image_0.png" alt="Minecraft Adventure" class="main-image">
+    <img src="main1.png" alt="Mystery in Rolling Hills" class="main-image">
     
     <!-- Progress Bar -->
     <div class="progress-bar">
-        <div class="progress-fill" id="progressBar" style="width: 0%;">Stage 0/5</div>
+        <div class="progress-fill" id="progressBar" style="width: 0%;">Stage 0/6</div>
     </div>
     
     <h1>🔍 MYSTERY IN ROLLING HILLS ESTATES 🔍</h1>
@@ -311,13 +311,35 @@
         </p>
     </div>
     
-    <p style="font-size: 12px;">Complete all 5 stages to find June!</p>
+    <p style="font-size: 12px;">Complete all 6 stages to find June!</p>
     <hr style="border-color: #ffd700;">
 
-    <!-- STAGE 1: MATH PROBLEMS -->
+    <!-- STAGE 1: NAME ENTRY -->
     <div id="stage1">
+        <div class="stage-icon">👥</div>
+        <h3>STAGE 1: ASSEMBLE YOUR TEAM</h3>
+        <p>Enter the names of all detectives joining the search!</p>
+        <p style="font-size: 11px; color: #aaa;">You need at least 5 kids to start</p>
+        
+        <div style="margin: 20px 0;">
+            <input type="text" id="nameInput" placeholder="Enter detective name" style="max-width: 300px;">
+            <br>
+            <button onclick="addName()">ADD DETECTIVE</button>
+        </div>
+        
+        <div id="nameList" style="margin: 20px 0; min-height: 100px; background: rgba(0,0,0,0.3); padding: 15px; border: 2px solid #5A5A5A;">
+            <p style="font-size: 11px; color: #aaa;">Team Members: <span id="nameCount">0</span></p>
+            <div id="names" style="margin-top: 10px;"></div>
+        </div>
+        
+        <button onclick="startMission()" id="startBtn" style="background: #FF6B6B; box-shadow: inset 2px 2px 0 rgba(255,255,255,0.3), inset -2px -2px 0 rgba(0,0,0,0.3), 0 4px 0 #8A2A2A;" disabled>START MISSION</button>
+        <p id="nameMsg" class="message"></p>
+    </div>
+
+    <!-- STAGE 2: MATH PROBLEMS -->
+    <div id="stage2" class="hidden">
         <div class="stage-icon">🔢</div>
-        <h3>STAGE 1: MATH CHALLENGE</h3>
+        <h3>STAGE 2: MATH CHALLENGE</h3>
         <p>Solve these math problems to proceed!</p>
         
         <div class="math-problem" id="mathProblem">5 + 3 = ?</div>
@@ -328,20 +350,20 @@
         <p style="color: #aaa; font-size: 14px;">Problem <span id="mathProgress">1</span> of 3</p>
     </div>
 
-    <!-- STAGE 2: CHESS GAME -->
-    <div id="stage2" class="hidden">
+    <!-- STAGE 3: CHESS GAME -->
+    <div id="stage3" class="hidden">
         <div class="stage-icon">♟️</div>
-        <h3>STAGE 2: CHESS MASTER</h3>
+        <h3>STAGE 3: CHESS MASTER</h3>
         <p>Find the checkmate in 1 move!</p>
         <p style="color: #00ffff;">You are playing as White. Drag a piece to win!</p>
         <div id="board"></div>
         <p id="status" class="message">Your Turn (White)</p>
     </div>
 
-    <!-- STAGE 3: SLIDING PUZZLE -->
-    <div id="stage3" class="hidden">
+    <!-- STAGE 4: SLIDING PUZZLE -->
+    <div id="stage4" class="hidden">
         <div class="stage-icon">🧩</div>
-        <h3>STAGE 3: NUMBER PUZZLE</h3>
+        <h3>STAGE 4: NUMBER PUZZLE</h3>
         <p>Arrange the numbers from 1 to 8 in order!</p>
         <p style="color: #aaa; font-size: 14px;">Click tiles next to the empty space to move them</p>
         
@@ -351,10 +373,10 @@
         <p id="puzzleMsg" class="message"></p>
     </div>
 
-    <!-- STAGE 4: PHOTO UPLOAD -->
-    <div id="stage4" class="hidden">
+    <!-- STAGE 5: PHOTO UPLOAD -->
+    <div id="stage5" class="hidden">
         <div class="stage-icon">📸</div>
-        <h3>STAGE 4: PHOTO MISSION</h3>
+        <h3>STAGE 5: PHOTO MISSION</h3>
         <p><strong>Your mission:</strong></p>
         <p style="font-size: 20px; color: #ffd700;">Find something RED in your house<br>and take a photo of it!</p>
         
@@ -370,8 +392,8 @@
         <p id="photoMsg" class="message"></p>
     </div>
 
-    <!-- STAGE 5: TREASURE FOUND! -->
-    <div id="stage5" class="hidden">
+    <!-- STAGE 6: TREASURE FOUND! -->
+    <div id="stage6" class="hidden">
         <div class="stage-icon">🎉</div>
         <h1>🏆 CONGRATULATIONS! 🏆</h1>
         <p style="font-size: 22px;">You've completed all the challenges!</p>
@@ -396,14 +418,99 @@
 
 <script>
     let currentStage = 1;
+    let detectives = [];
     
     // Update progress bar
     function updateProgress() {
         const progressBar = document.getElementById('progressBar');
-        const percentage = (currentStage / 5) * 100;
+        const percentage = (currentStage / 6) * 100;
         progressBar.style.width = percentage + '%';
-        progressBar.textContent = 'Stage ' + currentStage + '/5';
+        progressBar.textContent = 'Stage ' + currentStage + '/6';
     }
+    
+    // ====== STAGE 1: NAME ENTRY ======
+    function addName() {
+        const input = document.getElementById('nameInput');
+        const name = input.value.trim();
+        const msgEl = document.getElementById('nameMsg');
+        
+        if (name === '') {
+            msgEl.textContent = '❌ Please enter a name!';
+            msgEl.style.color = '#ff0000';
+            return;
+        }
+        
+        if (detectives.includes(name)) {
+            msgEl.textContent = '❌ This name is already added!';
+            msgEl.style.color = '#ff0000';
+            return;
+        }
+        
+        detectives.push(name);
+        input.value = '';
+        updateNameList();
+        msgEl.textContent = '✅ ' + name + ' joined the team!';
+        msgEl.style.color = '#00ff00';
+        
+        setTimeout(() => {
+            msgEl.textContent = '';
+        }, 2000);
+    }
+    
+    function updateNameList() {
+        const namesDiv = document.getElementById('names');
+        const countSpan = document.getElementById('nameCount');
+        const startBtn = document.getElementById('startBtn');
+        
+        countSpan.textContent = detectives.length;
+        
+        namesDiv.innerHTML = detectives.map((name, index) => 
+            '<div style="display: inline-block; background: #7DBE3B; color: #fff; padding: 8px 12px; margin: 5px; border: 2px solid #5A5A5A; font-size: 10px;">' +
+            '👤 ' + name + 
+            ' <span onclick="removeName(' + index + ')" style="cursor: pointer; margin-left: 8px; color: #ff0000; font-weight: bold;">✖</span>' +
+            '</div>'
+        ).join('');
+        
+        if (detectives.length >= 5) {
+            startBtn.disabled = false;
+            startBtn.style.opacity = '1';
+        } else {
+            startBtn.disabled = true;
+            startBtn.style.opacity = '0.5';
+        }
+    }
+    
+    function removeName(index) {
+        detectives.splice(index, 1);
+        updateNameList();
+    }
+    
+    function startMission() {
+        const msgEl = document.getElementById('nameMsg');
+        msgEl.textContent = '🚀 Mission starting! Good luck team!';
+        msgEl.style.color = '#00ff00';
+        
+        setTimeout(() => {
+            nextStage('stage1', 'stage2');
+        }, 1500);
+    }
+    
+    // Allow Enter key for name input
+    document.addEventListener('DOMContentLoaded', function() {
+        const nameInput = document.getElementById('nameInput');
+        if (nameInput) {
+            nameInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') addName();
+            });
+        }
+        
+        const mathInput = document.getElementById('mathAnswer');
+        if (mathInput) {
+            mathInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') checkMath();
+            });
+        }
+    });
     
     // Go to next stage
     function nextStage(current, next) {
@@ -445,10 +552,10 @@
                 }, 1000);
             } else {
                 // All problems solved!
-                msgEl.textContent = "🎉 Perfect! Moving to Stage 2...";
+                msgEl.textContent = "🎉 Perfect! Moving to Stage 3...";
                 msgEl.style.color = "#00ff00";
                 setTimeout(() => {
-                    nextStage('stage1', 'stage2');
+                    nextStage('stage2', 'stage3');
                     initChess();
                 }, 1500);
             }
@@ -458,17 +565,9 @@
         }
     }
     
-    // Allow Enter key for math
-    document.addEventListener('DOMContentLoaded', function() {
-        const mathInput = document.getElementById('mathAnswer');
-        if (mathInput) {
-            mathInput.addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') checkMath();
-            });
-        }
-    });
+    // ====== STAGE 2: MATH PROBLEMS (Continued) ======
     
-    // ====== STAGE 2: CHESS ======
+    // ====== STAGE 3: CHESS ======
     var board = null;
     var game = new Chess();
 
@@ -517,7 +616,7 @@
             document.getElementById('status').style.color = "#00ff00";
             // Wait 1.5 seconds then show next stage
             setTimeout(function() {
-                nextStage('stage2', 'stage3');
+                nextStage('stage3', 'stage4');
                 initPuzzle();
             }, 1500);
         } else {
@@ -599,10 +698,10 @@
         
         const msgEl = document.getElementById('puzzleMsg');
         if (solved) {
-            msgEl.textContent = "🎉 Puzzle Solved! Moving to Stage 4...";
+            msgEl.textContent = "🎉 Puzzle Solved! Moving to Stage 5...";
             msgEl.style.color = "#00ff00";
             setTimeout(() => {
-                nextStage('stage3', 'stage4');
+                nextStage('stage4', 'stage5');
             }, 1500);
         } else {
             msgEl.textContent = "❌ Not quite right. Keep trying!";
@@ -637,7 +736,7 @@
             msgEl.textContent = "📸 Perfect! Great photo! Moving to final stage...";
             msgEl.style.color = "#00ff00";
             setTimeout(() => {
-                nextStage('stage4', 'stage5');
+                nextStage('stage5', 'stage6');
             }, 2000);
         } else {
             msgEl.textContent = "❌ Please upload a photo first!";
