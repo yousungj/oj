@@ -289,33 +289,32 @@
 <body>
 
 <div class="container">
-    <img src="main1.png" alt="Mystery in Rolling Hills" class="main-image">
-    
     <!-- Progress Bar -->
     <div class="progress-bar">
         <div class="progress-fill" id="progressBar" style="width: 0%;">Stage 0/6</div>
     </div>
-    
-    <h1>🔍 MYSTERY IN ROLLING HILLS ESTATES 🔍</h1>
-    
-    <div style="background: rgba(0,0,0,0.5); padding: 20px; margin: 20px 0; border: 4px solid #FF6B6B; box-shadow: inset 2px 2px 0 rgba(0,0,0,0.3);">
-        <p style="font-size: 13px; line-height: 2; color: #FFFF55;">
-            In the middle of the night in quiet Rolling Hills Estates, a lady named <strong style="color: #FF6B6B;">June</strong> disappeared. 
-            To help find her, the community called upon the <strong style="color: #55FFFF;">RHCC kids</strong> to find the clues.
-        </p>
-        <p style="font-size: 13px; line-height: 2; color: #FFFF55; margin-top: 15px;">
-            Now gather at least <strong style="color: #55FF55;">5 kids</strong> and solve the clues together.
-        </p>
-        <p style="font-size: 14px; color: #FF6B6B; margin-top: 15px; font-weight: bold;">
-            Good luck. June's life depends on you! 🚨
-        </p>
-    </div>
-    
-    <p style="font-size: 12px;">Complete all 6 stages to find June!</p>
-    <hr style="border-color: #ffd700;">
 
     <!-- STAGE 1: NAME ENTRY -->
     <div id="stage1">
+        <img src="main1.png" alt="Mystery in Rolling Hills" class="main-image">
+        
+        <h1>🔍 MYSTERY IN ROLLING HILLS ESTATES 🔍</h1>
+        
+        <div style="background: rgba(0,0,0,0.5); padding: 20px; margin: 20px 0; border: 4px solid #FF6B6B; box-shadow: inset 2px 2px 0 rgba(0,0,0,0.3);">
+            <p style="font-size: 13px; line-height: 2; color: #FFFF55;">
+                In the middle of the night in quiet Rolling Hills Estates, a lady named <strong style="color: #FF6B6B;">June</strong> disappeared. 
+                To help find her, the community called upon the <strong style="color: #55FFFF;">RHCC kids</strong> to find the clues.
+            </p>
+            <p style="font-size: 13px; line-height: 2; color: #FFFF55; margin-top: 15px;">
+                Now gather at least <strong style="color: #55FF55;">5 kids</strong> and solve the clues together.
+            </p>
+            <p style="font-size: 14px; color: #FF6B6B; margin-top: 15px; font-weight: bold;">
+                Good luck. June's life depends on you! 🚨
+            </p>
+        </div>
+        
+        <hr style="border-color: #ffd700;">
+        
         <div class="stage-icon">👥</div>
         <h3>STAGE 1: ASSEMBLE YOUR TEAM</h3>
         <p>Enter the names of all detectives joining the search!</p>
@@ -340,7 +339,12 @@
     <div id="stage2" class="hidden">
         <div class="stage-icon">🔢</div>
         <h3>STAGE 2: MATH CHALLENGE</h3>
-        <p>Solve these math problems to proceed!</p>
+        
+        <div style="background: rgba(0,0,0,0.5); padding: 15px; margin: 15px 0; border: 2px solid #55FFFF;">
+            <p style="font-size: 12px; line-height: 2; color: #FFFF55;">
+                To check if you are capable of solving the mystery, please show your intelligence by solving these math problems.
+            </p>
+        </div>
         
         <div class="math-problem" id="mathProblem">5 + 3 = ?</div>
         <input type="number" id="mathAnswer" placeholder="Your answer">
