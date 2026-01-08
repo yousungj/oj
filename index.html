@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <title>🏴‍☠️ Treasure Hunt Adventure</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    
+    <script>
+        // Enforce HTTPS
+        if (window.location.protocol === 'http:' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && window.location.hostname !== '::1') {
+            window.location.replace('https://' + window.location.hostname + window.location.pathname + window.location.search + window.location.hash);
+        }
+    </script>
     
     <link rel="stylesheet" href="https://unpkg.com/@chrisoakman/chessboardjs@1.0.0/dist/chessboard-1.0.0.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
